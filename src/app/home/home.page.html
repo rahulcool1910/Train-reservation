@@ -1,0 +1,224 @@
+<ion-content>
+  <div class="login" *ngIf="is_logged_in">
+    <p class="login_text">{{User_data.displayName}}</p>
+    <img [src]="User_data.photoURL" alt="" class="login_img" />
+  </div>
+  <div class="menu">
+    <input type="checkbox" id="toggle" class="menu-input" />
+    <label for="toggle" class="menu-label"
+      ><span class="menu-label-icon"></span
+    ></label>
+
+    <div class="menu-bg"></div>
+
+    <div class="menu-navbar">
+      <ul class="menu-navbar-ul">
+        <li
+          class="menu-navbar-list"
+          routerLink="/home"
+          routerLinkActive="router-link-active"
+        >
+          home
+        </li>
+        <li class="menu-navbar-list">about</li>
+        <li class="menu-navbar-list">bookings</li>
+        <li class="menu-navbar-list" *ngIf="!is_logged_in" (click)="signin()">
+          login
+        </li>
+        <li class="menu-navbar-list" *ngIf="is_logged_in" (click)="logout()">
+          logout
+        </li>
+      </ul>
+    </div>
+
+    <div class="menu-main">
+      <div class="menu-main-inner">
+        <div class="menu-main-inner-main-text">
+          <h1>Ticket booking</h1>
+        </div>
+        <ion-grid>
+          <form class="menu-main-inner-form" (submit)="Submit()">
+            <div class="menu-main-inner-form form">
+              <ion-row>
+                <ion-col>
+                  <div class="form-from">
+                    <mat-form-field>
+                      <input
+                        type="text"
+                        placeholder="Pick Origin"
+                        aria-label="Number"
+                        matInput
+                        required
+                        [formControl]="from"
+                        [matAutocomplete]="auto1"
+                      />
+                      <mat-autocomplete #auto1="matAutocomplete">
+                        <mat-option
+                          *ngFor="let option1 of filteredOptions_from |async"
+                          [value]="option1"
+                        >
+                          {{option1}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-error *ngIf="from.invalid"
+                      >pick a valid origin place
+                    </mat-error>
+                    <mat-error *ngIf="Bothsame"
+                      >Origin cannot be same as the destination</mat-error
+                    >
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-to">
+                    <mat-form-field>
+                      <input
+                        type="text"
+                        placeholder="Pick destination"
+                        aria-label="Number"
+                        matInput
+                        required
+                        value="mumbai"
+                        [formControl]="to"
+                        [matAutocomplete]="auto2"
+                      />
+                      <mat-autocomplete #auto2="matAutocomplete">
+                        <mat-option
+                          *ngFor="let option2 of filteredOptions_to |async"
+                          [value]="option2"
+                        >
+                          {{option2}}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-error *ngIf="to.invalid"
+                      >pick a valid destination
+                    </mat-error>
+                    <mat-error *ngIf="Bothsame"
+                      >Origin cannot be same as the destination</mat-error
+                    >
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-date">
+                    <ion-list>
+                      <ion-item>
+                        <ion-label>Date</ion-label>
+                        <ion-datetime
+                          (ionChange)="getdate($event)"
+                          display-format="DD.MM.YYYY"
+                        ></ion-datetime>
+                      </ion-item>
+                    </ion-list>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-button">
+                    <button mat-raised-button color="primary" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+          </form>
+        </ion-grid>
+      </div>
+    </div>
+    <div class="menu-new1" *ngIf="available.length>0">
+      <swiper-container
+        [options]="swipeOptions"
+        [pager]="true"
+        #homeSlide
+        class="swiper-container"
+      >
+        <swiper-slide *ngFor="let item of available">
+          <div class="card" (click)="Open_modal(item)">
+            <p>train-no: {{item.train_id}}</p>
+            <p>train-name: {{item.train_name}}</p>
+            <div class="card-flex">
+              <div class="card-from">
+                <p>form</p>
+
+                <img
+                  src="../../assets/location-from.svg"
+                  class="card-img"
+                  alt=""
+                />
+
+                <p>{{item.from_city}}</p>
+                <p>{{item.departing_time|number}}</p>
+              </div>
+              <div class="card-path">
+                <img src="../../assets/path.svg" class="card-img" alt="" />
+              </div>
+              <div class="card-to">
+                <p>to</p>
+                <img
+                  src="../../assets/location -to.svg"
+                  class="card-img"
+                  alt=""
+                />
+                <p>{{item.to_city}}</p>
+                <p>{{item.reaching_time}}</p>
+              </div>
+            </div>
+            <p>
+              duration: {{item.travel_time[0]+'D
+              :'+item.travel_time[1]+'H:'+item.travel_time[2]+'M'}}
+            </p>
+            <div class="available">
+              <p class="available-inner">
+                {{item.dates}}
+              </p>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper-container>
+      <!-- <div class="swiper-pagination"></div>
+      <div class="swiper-button-next swiper-button-white"></div>
+      <div class="swiper-button-prev swiper-button-white"></div> -->
+
+      <!-- <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div> -->
+    </div>
+  </div>
+</ion-content>
+
+<style>
+  .animated {
+    visibility: visible;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    ,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .hide-on-init {
+    height: 100vh;
+    background-color: azure;
+    visibility: hidden;
+  }
+  img[data-scroll] {
+    transition: all 1s;
+  }
+
+  img[data-scroll='out'] {
+    transform: translate(-100px);
+  }
+  img[data-scroll='in'] {
+    transform: translate(100px);
+  }
+</style>

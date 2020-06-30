@@ -1,0 +1,57 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-icon
+      name="arrow-back-outline"
+      size="large"
+      (click)="onClick()"
+    ></ion-icon
+
+    <ion-title slot="primary">Bookings</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+<ion-content>
+  <button></button>
+  <img class="bg" src="../../../assets//bookings.svg" alt="" class="bg" />
+  <div class="card">
+    <h1>train-no:{{ data.train_id }}</h1>
+    <h2>train-name:{{ data.train_name }}</h2>
+    <div class="main">
+      <div class="main_1">
+        <h2>From</h2>
+        <img src="../../../assets//location-from.svg" alt="" />
+        <h3>
+          {{ data.from_city }}
+        </h3>
+      </div>
+      <div class="main_2">
+        <h2>To</h2>
+        <img src="../../../assets//location -to.svg" alt="" />
+
+        <h3>
+          {{ data.to_city }}
+        </h3>
+      </div>
+    </div>
+    <h2>{{ data.dates }}</h2>
+    <select id="couch" (change)="farechange($event.target.value)">
+      <option value="sleeper_fare">Sleeper</option>
+      <option value="ac_fare">AC</option>
+    </select>
+
+    <h2>fare:{{ fare }}</h2>
+    <ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
+      Book
+    </ion-button>
+  </div>
+</ion-content>
+
+<style>
+  ion-slides {
+    height: 100%;
+  }
+
+  ion-slide {
+    height: 300px;
+    background-color: red;
+  }
+</style>
